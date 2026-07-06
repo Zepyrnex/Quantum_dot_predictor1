@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quantum Dot Display Color Simulator</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">PBL 2026 | Team 08</p>
+        <h1>Quantum Dot Display Color Simulator</h1>
+        <p class="intro">
+          Explore how changing quantum dot size shifts the emitted wavelength, RGB output,
+          and visible display color through quantum confinement.
+        </p>
+      </div>
+      <div class="header-tools">
+        <nav aria-label="Page sections">
+          <a href="#simulator">Simulator</a>
+          <a href="#graph">Graph</a>
+          <a href="confinement.html">Confinement</a>
+          <a href="#feedback">Feedback</a>
+        </nav>
+        <button id="themeToggle" class="icon-toggle" type="button" aria-label="Switch to dark mode">
+          <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.2 15.7A8.5 8.5 0 0 1 8.3 3.8 8.7 8.7 0 1 0 20.2 15.7Z"></path>
+          </svg>
+          <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <span id="themeLabel">Dark</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section id="simulator" class="simulator-layout" aria-label="Quantum dot simulator">
+        <form class="control-panel" aria-label="Simulation controls">
+          <div class="panel-title">
+            <p class="eyebrow">Input</p>
+            <h2>Set the nanocrystal</h2>
+          </div>
+
+          <label for="material">Material model</label>
+          <select id="material" name="material">
+            <option value="cdse">CdSe display dots</option>
+            <option value="inp">InP display dots</option>
+            <option value="perovskite">Perovskite dots</option>
+          </select>
+
+          <div class="manual-diameter">
+            <label for="diameterNumber">Diameter input</label>
+            <div class="diameter-input-row">
+              <input id="diameterNumber" name="diameterNumber" type="text" value="4.8" inputmode="decimal" autocomplete="off" aria-describedby="diameterWarning">
+              <span>nm</span>
+            </div>
+            <p id="diameterWarning" class="warning-text" aria-live="polite"></p>
+          </div>
+
+          <div class="range-row">
+            <label for="diameter">Quantum dot diameter</label>
+            <output id="diameterValue" for="diameter">4.8 nm</output>
+          </div>
+          <input id="diameter" name="diameter" type="range" min="2" max="9" step="0.1" value="4.8">
+
+          <section class="color-details" aria-label="Predicted color data">
+            <div class="color-swatch" id="inputColorSwatch" aria-hidden="true"></div>
+            <div>
+              <span>Detailed color</span>
+              <strong id="detailedColorName">Deep red</strong>
+            </div>
+            <div>
+              <span>HEX value</span>
+              <strong id="hexMetric">#FF2A00</strong>
+            </div>
+            <div>
+              <span>RGB value</span>
+              <strong id="inputRgbMetric">rgb(255, 42, 0)</strong>
+            </div>
+          </section>
+
+          <div>
+            <label>Quick color presets</label>
+            <div class="preset-grid" aria-label="Quantum dot color presets">
+              <button type="button" class="preset-button" data-preset="blue">Blue</button>
+              <button type="button" class="preset-button" data-preset="green">Green</button>
+              <button type="button" class="preset-button" data-preset="red">Red</button>
+            </div>
+          </div>
+
+          <div class="range-row">
+            <label for="spread">Size distribution</label>
+            <output id="spreadValue" for="spread">8%</output>
+          </div>
+          <input id="spread" name="spread" type="range" min="2" max="20" step="1" value="8">
+
+          <fieldset>
+            <legend>Display sample</legend>
+            <label class="check-row">
+              <input id="compareWhite" type="checkbox" checked>
+              Blend into white display pixels
+            </label>
+            <label class="check-row">
+              <input id="showDistribution" type="checkbox" checked>
+              Show wavelength distribution
+            </label>
+          </fieldset>
+
+          <div class="action-row">
+            <button id="resetButton" class="secondary-button" type="button">Reset</button>
+            <button id="copyButton" class="primary-button" type="button">Copy result</button>
+          </div>
+          <p id="copyStatus" class="status-text" aria-live="polite"></p>
+        </form>
+
+        <section class="results-panel" aria-label="Predicted optical output">
+          <div class="visual-stage">
+            <canvas id="dotCanvas" width="720" height="420" aria-label="Animated quantum dot display visualization"></canvas>
+            <div class="color-chip" id="colorChip">
+              <span>Predicted color</span>
+              <strong id="colorName">Green</strong>
+            </div>
+          </div>
+
+          <div class="metric-grid">
+            <article>
+              <span>Emission wavelength</span>
+              <strong id="wavelengthMetric">534 nm</strong>
+            </article>
+            <article>
+              <span>RGB output</span>
+              <strong id="rgbMetric">rgb(116, 255, 0)</strong>
+            </article>
+            <article>
+              <span>Band gap energy</span>
+              <strong id="energyMetric">2.32 eV</strong>
+            </article>
+            <article>
+              <span>Confinement shift</span>
+              <strong id="shiftMetric">+0.58 eV</strong>
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <section id="graph" class="analysis-grid">
+        <article class="analysis-main">
+          <div class="section-heading">
+            <p class="eyebrow">Real-time graph</p>
+            <h2>Size vs wavelength</h2>
+          </div>
+          <canvas id="curveCanvas" width="900" height="430" aria-label="Size versus wavelength graph"></canvas>
+          <p class="helper-text">
+            Smaller dots have a larger band gap, so the emission shifts toward shorter blue wavelengths.
+            Larger dots emit longer yellow, orange, and red wavelengths.
+          </p>
+        </article>
+
+        <aside class="spectrum-card">
+          <div class="section-heading">
+            <p class="eyebrow">Visible spectrum</p>
+            <h2>Current position</h2>
+          </div>
+          <div class="spectrum-bar" aria-hidden="true">
+            <span id="spectrumMarker"></span>
+          </div>
+          <dl>
+            <div>
+              <dt>Visible range</dt>
+              <dd>380-700 nm</dd>
+            </div>
+            <div>
+              <dt>Prediction type</dt>
+              <dd>Scientific trend model</dd>
+            </div>
+            <div>
+              <dt>Best use</dt>
+              <dd>Learning, display concept design, quick comparison</dd>
+            </div>
+          </dl>
+        </aside>
+      </section>
+
+      <section class="choices-section" aria-label="Website feature choices">
+        <div class="section-heading">
+          <p class="eyebrow">Feedback</p>
+          <h2>Suggest a feature</h2>
+        </div>
+        <div id="feedback" class="feedback-card">
+          <div>
+            <h3>Have an idea for the next version?</h3>
+          <p>
+              Share a feature request such as demo mode, export options, comparison tools, or quiz questions.
+          </p>
+        </div>
+          <button id="openFeedback" class="primary-button" type="button">Suggest feature</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Quantum dot size effect, wavelength prediction, RGB mapping, and visible display simulation.</p>
+    </footer>
+
+    <dialog id="feedbackDialog" class="feedback-dialog" aria-labelledby="feedbackTitle">
+      <form method="dialog" class="feedback-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">Feature request</p>
+            <h2 id="feedbackTitle">What should be added?</h2>
+          </div>
+          <button id="closeFeedback" class="icon-only" type="button" aria-label="Close feedback popup">x</button>
+        </div>
+        <label for="featureName">Feature name</label>
+        <input id="featureName" name="featureName" type="text" placeholder="Example: material comparison">
+        <label for="featureDetails">Short description</label>
+        <textarea id="featureDetails" name="featureDetails" rows="4" placeholder="Describe how this feature should work."></textarea>
+        <div class="action-row">
+          <button class="secondary-button" value="cancel" type="button" id="cancelFeedback">Cancel</button>
+          <button class="primary-button" value="submit" type="submit">Save idea</button>
+        </div>
+        <p id="feedbackStatus" class="status-text" aria-live="polite"></p>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Simulation of Quantum Confinement</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="app-header subpage-header">
+      <div>
+        <p class="eyebrow">Interactive concept model</p>
+        <h1>Simulation of Quantum Confinement</h1>
+        <p class="intro">
+          See why smaller quantum dots produce higher band gap energy and emit
+          shorter wavelength light.
+        </p>
+      </div>
+      <div class="header-tools">
+        <nav aria-label="Confinement page navigation">
+          <a href="index.html">Main simulator</a>
+          <a href="index.html#graph">Graph</a>
+          <a href="index.html#feedback">Feedback</a>
+        </nav>
+        <button id="themeToggle" class="icon-toggle" type="button" aria-label="Switch to dark mode">
+          <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.2 15.7A8.5 8.5 0 0 1 8.3 3.8 8.7 8.7 0 1 0 20.2 15.7Z"></path>
+          </svg>
+          <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <span id="themeLabel">Dark</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="subpage-main">
+      <section class="explain-panel">
+        <div class="section-heading">
+          <p class="eyebrow">Short explanation</p>
+          <h2>What quantum confinement means</h2>
+        </div>
+        <p>
+          Quantum confinement happens when a semiconductor crystal becomes so small
+          that electrons and holes are restricted inside a nanoscale space. When the
+          dot gets smaller, the allowed energy levels spread farther apart. That
+          increases the band gap, so the emitted photon has higher energy and a
+          shorter wavelength, shifting the color toward blue.
+        </p>
+      </section>
+
+      <section class="confinement-layout" aria-label="Quantum confinement simulation">
+        <aside class="info-panel">
+          <div class="panel-title">
+            <p class="eyebrow">Controls</p>
+            <h2>Change the dot size</h2>
+          </div>
+
+          <div class="control-group">
+            <label for="confMaterial">Material model</label>
+            <div class="select-shell">
+              <select id="confMaterial" name="confMaterial">
+                <option value="cdse">CdSe display dots</option>
+                <option value="inp">InP display dots</option>
+                <option value="perovskite">Perovskite dots</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="control-group manual-diameter">
+            <label for="confDiameterNumber">Diameter input</label>
+            <div class="diameter-input-row">
+              <input id="confDiameterNumber" name="confDiameterNumber" type="text" value="4.8" inputmode="decimal" autocomplete="off" aria-describedby="confDiameterWarning">
+              <span>nm</span>
+            </div>
+            <p id="confDiameterWarning" class="warning-text" aria-live="polite"></p>
+          </div>
+
+          <div class="control-group">
+            <div class="range-row">
+              <label for="confDiameter">Quantum dot diameter</label>
+              <output id="confDiameterValue" for="confDiameter">4.8 nm</output>
+            </div>
+            <input id="confDiameter" name="confDiameter" type="range" min="2" max="9" step="0.1" value="4.8">
+          </div>
+
+          <p class="helper-text">
+            Move the slider left to confine the electron more tightly. The gap grows
+            and the emitted photon shifts to a shorter wavelength.
+          </p>
+        </aside>
+
+        <section class="simulation-panel">
+          <canvas id="confCanvas" width="900" height="430" aria-label="Quantum confinement band gap simulation"></canvas>
+          <div class="mini-metrics">
+            <article>
+              <span>Band gap</span>
+              <strong id="confEnergy">2.32 eV</strong>
+            </article>
+            <article>
+              <span>Wavelength</span>
+              <strong id="confWavelength">534 nm</strong>
+            </article>
+            <article>
+              <span>Color shift</span>
+              <strong id="confShift">Toward green</strong>
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <section class="explain-panel">
+        <div class="section-heading">
+          <p class="eyebrow">How to read it</p>
+          <h2>Dot size controls display color</h2>
+        </div>
+        <p>
+          The circle represents the quantum dot. The horizontal bars represent
+          simplified valence and conduction energy levels. When the dot is smaller,
+          the separation between those bars increases. The photon arrow changes color
+          because photon energy and wavelength are linked by E = hc/lambda.
+        </p>
+      </section>
+    </main>
+
+    <script src="confinement.js"></script>
+  </body>
+</html>
