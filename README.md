@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Quantum Dot Display Color Simulator
 
 Static prototype web app for the project "Quantum Dot-Based Display Color Simulation".
@@ -39,12 +38,7 @@ Then open:
 ```text
 http://localhost:8080
 ```
-
 To view from another device on the same Wi-Fi, replace `localhost` with your laptop's local IP address.
-
 ## Project note
-
 The prediction model is a prototype trend model for demonstrating quantum confinement. It is useful for visualization and learning, not a lab-grade material design calculator.
-=======
-# Quantum_dot_predictor
->>>>>>> a077cbe517bd7a02738701cd4b70a6db14d855be
+
